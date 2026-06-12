@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>💕</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink: #E8427A;
+      --pink-light: #FF6B9D;
+      --pink-bg: #FFF0F5;
+      --text: #2D1B25;
+      --text-muted: #7A4F61;
+      --white: #FFFFFF;
+      --radius: 18px;
+    }
+
+    body {
+      font-family: 'Nunito Sans', 'Helvetica Neue', sans-serif;
+      background: var(--pink-bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    section { display: none; }
+    section.active { display: flex; }
+
+    /* ── STEP 1 ────────────────────────────────── */
+    #step1 {
+      min-height: 100vh;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      text-align: center;
+      animation: fadeUp 0.5s ease;
+    }
+
+    .s1-heart {
+      font-size: 72px;
+      line-height: 1;
+      margin-bottom: 28px;
+      display: block;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.12); }
+    }
+
+    .s1-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--pink);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    #subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      font-style: italic;
+      min-height: 26px;
+      margin-bottom: 52px;
+      transition: opacity 0.25s ease;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    #btn-sim {
+      background: var(--pink);
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      padding: 13px 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(232,66,122,0.38);
+      transition: font-size 0.35s cubic-bezier(0.34,1.56,0.64,1),
+                  padding 0.35s cubic-bezier(0.34,1.56,0.64,1),
+                  box-shadow 0.2s;
+    }
+
+    #btn-sim:hover { box-shadow: 0 6px 24px rgba(232,66,122,0.5); }
+
+    #btn-nao {
+      background: var(--white);
+      color: var(--text-muted);
+      border: 2px solid #DCC0CC;
+      border-radius: 100px;
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 11px 26px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    #btn-nao:hover { background: #F9EBF0; }
+
+    /* ── STEP 2+3 ──────────────────────────────── */
+    #step23 {
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 64px;
+      animation: fadeUp 0.45s ease;
+    }
+
+    .s23-inner { width: 100%; max-width: 440px; }
+
+    .section-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--pink);
+      margin-bottom: 16px;
+    }
+
+    .rec-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .ts-card {
+      background: var(--white);
+      border: 2.5px solid transparent;
+      border-radius: var(--radius);
+      padding: 15px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      user-select: none;
+    }
+
+    .ts-card:hover { border-color: var(--pink-light); }
+
+    .ts-card.selected {
+      border-color: var(--pink);
+      background: #FFF0F5;
+    }
+
+    .ts-day { font-weight: 800; font-size: 15px; margin-bottom: 3px; }
+    .ts-time { font-size: 12.5px; color: var(--text-muted); }
+
+    .custom-toggle-btn {
+      background: none;
+      border: none;
+      color: var(--pink);
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 2px 0;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .custom-picker {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+
+    .picker-fields { display: flex; flex-direction: column; gap: 12px; }
+
+    .pf label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .pf select, .pf input[type="time"] {
+      width: 100%;
+      border: 2px solid #E2C8D4;
+      border-radius: 12px;
+      padding: 10px 13px;
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+      transition: border-color 0.15s;
+      -webkit-appearance: none;
+    }
+
+    .pf select:focus, .pf input[type="time"]:focus { border-color: var(--pink); }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, #E8C0D0, transparent);
+      margin: 24px 0;
+    }
+
+    #activities-section { width: 100%; }
+
+    .act-group { margin-bottom: 8px; }
+
+    .act-card {
+      background: var(--white);
+      border: 2px solid transparent;
+      border-radius: 14px;
+      padding: 13px 16px;
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+      margin-bottom: 7px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+      user-select: none;
+    }
+
+    .act-card:hover { border-color: var(--pink-light); }
+
+    .act-card.selected {
+      border-color: var(--pink);
+      background: #FFF0F5;
+      color: var(--pink);
+    }
+
+    .confirm-btn {
+      width: 100%;
+      background: var(--pink);
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      padding: 16px;
+      cursor: pointer;
+      margin-top: 28px;
+      box-shadow: 0 4px 18px rgba(232,66,122,0.38);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .confirm-btn:hover { transform: scale(1.02); box-shadow: 0 6px 22px rgba(232,66,122,0.48); }
+
+    /* ── STEP 4 ────────────────────────────────── */
+    #step4 {
+      min-height: 100vh;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px 56px;
+      animation: fadeUp 0.45s ease;
+    }
+
+    #summary-card {
+      background: linear-gradient(145deg, #FF6B9D 0%, #E8427A 55%, #C0315E 100%);
+      border-radius: 26px;
+      padding: 32px 26px 28px;
+      color: white;
+      width: 340px;
+      box-shadow: 0 10px 40px rgba(232,66,122,0.4);
+      margin-bottom: 28px;
+    }
+
+    .sum-header { text-align: center; margin-bottom: 22px; }
+    .sum-header .bh { font-size: 52px; display: block; margin-bottom: 6px; }
+    .sum-header h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .sum-slot {
+      background: rgba(255,255,255,0.22);
+      border-radius: 14px;
+      padding: 14px 16px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #sum-day { font-size: 20px; font-weight: 800; }
+    #sum-time { font-size: 14px; opacity: 0.9; margin-top: 3px; }
+
+    #sum-activities { list-style: none; }
+
+    #sum-activities li {
+      padding: 9px 0;
+      font-size: 15px;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #sum-activities li:last-child { border-bottom: none; }
+
+    .sum-footer {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 13px;
+      opacity: 0.75;
+      font-style: italic;
+    }
+
+    .share-btn {
+      width: 100%;
+      max-width: 340px;
+      background: #25D366;
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      padding: 15px 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(37,211,102,0.42);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .share-btn:hover { transform: scale(1.02); }
+    .share-btn:disabled { opacity: 0.7; cursor: default; transform: none; }
+
+    #share-fallback {
+      max-width: 340px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-style: italic;
+      margin-top: 14px;
+      padding: 14px 18px;
+      background: var(--white);
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     STEP 1 — Você quer sair comigo?
+══════════════════════════════════════════ -->
+<section id="step1" class="active">
+  <span class="s1-heart">💕</span>
+  <h1 class="s1-title">Você quer sair comigo?</h1>
+  <p id="subtitle"></p>
+  <div class="btn-row">
+    <button id="btn-sim">Sim 💕</button>
+    <button id="btn-nao">Não</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     STEP 2+3 — Horário & Atividades
+══════════════════════════════════════════ -->
+<section id="step23">
+  <div class="s23-inner">
+
+    <h2 class="section-title">Quando você quer sair?</h2>
+    <div class="rec-grid" id="rec-grid"></div>
+    <button class="custom-toggle-btn" id="custom-toggle">Escolher outro horário...</button>
+
+    <div class="custom-picker" id="custom-picker" style="display:none">
+      <div class="picker-fields">
+        <div class="pf">
+          <label>Dia</label>
+          <select id="pick-day"></select>
+        </div>
+        <div class="pf">
+          <label>Início</label>
+          <input type="time" id="pick-start">
+        </div>
+        <div class="pf">
+          <label>Fim</label>
+          <input type="time" id="pick-end">
+        </div>
+      </div>
+    </div>
+
+    <div class="divider" id="act-divider" style="display:none"></div>
+
+    <div id="activities-section" style="display:none">
+      <h2 class="section-title">O que você quer fazer?</h2>
+      <div id="act-list"></div>
+      <button class="confirm-btn" id="confirm-btn">Confirmar ✓</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     STEP 4 — Resumo
+══════════════════════════════════════════ -->
+<section id="step4">
+
+  <div id="summary-card">
+    <div class="sum-header">
+      <span class="bh">💕</span>
+      <h2>Nosso encontro</h2>
+    </div>
+    <div class="sum-slot">
+      <div id="sum-day"></div>
+      <div id="sum-time"></div>
+    </div>
+    <ul id="sum-activities"></ul>
+    <div class="sum-footer">feito com carinho 🌹</div>
+  </div>
+
+  <button class="share-btn" id="share-btn">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    Compartilhar no WhatsApp
+  </button>
+
+  <div id="share-fallback" style="display:none">
+    Programei mal, vc vai ter que tirar print e me mandar 😅
+  </div>
+
+</section>
+
+<script>
+// ────────────────────────────────────────────
+// DATA
+// ────────────────────────────────────────────
+const DATA = {
+  no_subtitles: [
+    "você tocou no errado",
+    "ops, de novo...",
+    "o sim é o outro botão",
+    "Fernanda você faz LETRAS",
+    "mais uma chance",
+    "...",
+    "quero ver agora",
+    "tá esperta ein..."
+  ],
+  available_timeslots: [
+    { day: "Sábado",  hour_begin: "10:00", hour_end: "18:00" },
+    { day: "Domingo", hour_begin: "10:00", hour_end: "20:00" },
+    { day: "Segunda", hour_begin: "16:30", hour_end: "21:00" },
+    { day: "Terça",   hour_begin: "17:30", hour_end: "21:00" }
+  ],
+  recommended_timeslots: [
+    { day: "Sábado",  hour_begin: "15:30", hour_end: "17:30" },
+    { day: "Domingo", hour_begin: "13:00", hour_end: "15:00" },
+    { day: "Segunda", hour_begin: "19:30", hour_end: "21:30" },
+    { day: "Terça",   hour_begin: "19:30", hour_end: "21:30" }
+  ],
+  activities: [
+    { name: "Z Deli",                                  min_minutes: 60,  category: "eat" },
+    { name: "Mica Izakaya",                            min_minutes: 60,  category: "eat" },
+    { name: "Teus Restaurante Bar",                    min_minutes: 75,  category: "eat" },
+    { name: "Deli Doner Kebab",                        min_minutes: 60,  day_restriction: ["Sábado","Segunda"], category: "eat" },
+    { name: "Pitico",                                  min_minutes: 60,  day_restriction: ["Segunda"],          category: "bar" },
+    { name: "Singelo Braseiro",                        min_minutes: 60,  day_restriction: ["Domingo","Segunda"],category: "bar" },
+    { name: "Fabrique - Vila Romana ou Vila Leopoldina", min_minutes: 20, hour_begin_restriction: 18,           category: "coffe" },
+    { name: "Le Jazz Boulangerie",                     min_minutes: 40,  hour_begin_restriction: 18,            category: "coffe" },
+    { name: "Padoca do Mani",                          min_minutes: 40,  hour_begin_restriction: 18,            category: "coffe" },
+    { name: "Parque Vila Lobos",                       min_minutes: 40,  hour_begin_restriction: 15,            category: "leisure" },
+    { name: "Beijar",                                  min_minutes: 5,   category: "kiss" },
+    { name: "Surpresa (entre a seleção)",              category: "surprise" },
+    { name: "Surpresa (entre todos)",                  category: "surprise" }
+  ]
+};
+
+const CAT_EMOJI = { eat: "🍽️", bar: "🍺", coffe: "☕", leisure: "🌳", kiss: "💋", surprise: "🎁" };
+
+// ────────────────────────────────────────────
+// STATE
+// ────────────────────────────────────────────
+let noCount = 0;
+let selectedSlot = null;
+let selectedActivities = {};
+
+// ────────────────────────────────────────────
+// STEP 1
+// ────────────────────────────────────────────
+const btnSim = document.getElementById('btn-sim');
+const btnNao = document.getElementById('btn-nao');
+const subtitleEl = document.getElementById('subtitle');
+
+function goToStep23() {
+  showStep('step23');
+  renderRecommended();
+  renderCustomDays();
+}
+
+function handleNao() {
+  noCount++;
+
+  subtitleEl.style.opacity = 0;
+  setTimeout(() => {
+    subtitleEl.textContent = DATA.no_subtitles[noCount - 1] || '';
+    subtitleEl.style.opacity = 1;
+  }, 150);
+
+  // Grow Sim button
+  const newSize   = Math.min(16 + noCount * 4, 52);
+  const newPadV   = Math.min(13 + noCount * 2, 27);
+  const newPadH   = Math.min(30 + noCount * 5, 60);
+  btnSim.style.fontSize = newSize + 'px';
+  btnSim.style.padding  = newPadV + 'px ' + newPadH + 'px';
+
+  if (noCount === 7) {
+    // Swap labels AND handlers so the "Não"-labeled button still triggers handleNao
+    btnNao.textContent = 'Sim 💕';
+    btnSim.textContent = 'Não';
+    btnNao.onclick = goToStep23;
+    btnSim.onclick = handleNao;
+  }
+
+  if (noCount === 8) {
+    // Both buttons now advance
+    btnSim.textContent = 'Sim 💕';
+    btnSim.onclick = goToStep23;
+  }
+}
+
+btnNao.onclick = handleNao;
+btnSim.onclick = goToStep23;
+
+// ────────────────────────────────────────────
+// STEP 2+3  –  timeslots
+// ────────────────────────────────────────────
+function renderRecommended() {
+  const grid = document.getElementById('rec-grid');
+  grid.innerHTML = '';
+  DATA.recommended_timeslots.forEach(slot => {
+    const card = document.createElement('div');
+    card.className = 'ts-card';
+    card.innerHTML = `<div class="ts-day">${slot.day}</div><div class="ts-time">${slot.hour_begin} às ${slot.hour_end}</div>`;
+    card.onclick = () => selectSlot(slot, card);
+    grid.appendChild(card);
+  });
+}
+
+function renderCustomDays() {
+  const sel = document.getElementById('pick-day');
+  sel.innerHTML = '';
+  DATA.available_timeslots.forEach(a => {
+    const opt = document.createElement('option');
+    opt.value = a.day;
+    opt.textContent = a.day;
+    sel.appendChild(opt);
+  });
+  syncCustomConstraints();
+}
+
+function availForDay(day) {
+  return DATA.available_timeslots.find(a => a.day === day);
+}
+
+function syncCustomConstraints() {
+  const avail = availForDay(document.getElementById('pick-day').value);
+  if (!avail) return;
+  const s = document.getElementById('pick-start');
+  const e = document.getElementById('pick-end');
+  s.min = avail.hour_begin;
+  s.max = avail.hour_end;
+  s.value = '';
+  e.min = avail.hour_begin;
+  e.max = avail.hour_end;
+  e.value = '';
+  clearCustomSelection();
+}
+
+function syncEndMin() {
+  const startVal = document.getElementById('pick-start').value;
+  const e = document.getElementById('pick-end');
+  if (startVal) { e.min = startVal; if (e.value && e.value < startVal) e.value = ''; }
+  clearCustomSelection();
+  tryApplyCustom();
+}
+
+function clearCustomSelection() {
+  if (selectedSlot && selectedSlot._custom) {
+    selectedSlot = null;
+    hideActivities();
+  }
+}
+
+function tryApplyCustom() {
+  const day   = document.getElementById('pick-day').value;
+  const start = document.getElementById('pick-start').value;
+  const end   = document.getElementById('pick-end').value;
+  if (!day || !start || !end || end <= start) return;
+  clearRecSelection();
+  selectSlot({ day, hour_begin: start, hour_end: end, _custom: true }, null);
+}
+
+function clearRecSelection() {
+  document.querySelectorAll('.ts-card.selected').forEach(c => c.classList.remove('selected'));
+}
+
+function selectSlot(slot, cardEl) {
+  clearRecSelection();
+  if (cardEl) cardEl.classList.add('selected');
+  selectedSlot = slot;
+  selectedActivities = {};
+  renderActivities(slot);
+}
+
+function toMins(t) {
+  const [h, m] = t.split(':').map(Number);
+  return h * 60 + m;
+}
+
+// ────────────────────────────────────────────
+// STEP 2+3  –  activities
+// ────────────────────────────────────────────
+function renderActivities(slot) {
+  const startMins = toMins(slot.hour_begin);
+  const endMins   = toMins(slot.hour_end);
+  const duration  = endMins - startMins;
+  const startHour = startMins / 60;
+
+  const visible = DATA.activities.filter(a => {
+    if (a.day_restriction && !a.day_restriction.includes(slot.day)) return false;
+    if (a.hour_begin_restriction !== undefined && startHour > a.hour_begin_restriction) return false;
+    if (a.min_minutes !== undefined && duration < a.min_minutes) return false;
+    return true;
+  });
+
+  const groups = {};
+  visible.forEach(a => { (groups[a.category] = groups[a.category] || []).push(a); });
+
+  const list = document.getElementById('act-list');
+  list.innerHTML = '';
+
+  Object.entries(groups).forEach(([cat, items]) => {
+    const grp = document.createElement('div');
+    grp.className = 'act-group';
+    items.forEach(act => {
+      const card = document.createElement('div');
+      card.className = 'act-card';
+      card.textContent = (CAT_EMOJI[cat] || '✨') + '  ' + act.name;
+      card.dataset.cat = cat;
+      card.dataset.name = act.name;
+      card.onclick = () => toggleActivity(cat, act.name, card, grp);
+      grp.appendChild(card);
+    });
+    list.appendChild(grp);
+  });
+
+  document.getElementById('activities-section').style.display = 'block';
+  document.getElementById('act-divider').style.display = 'block';
+}
+
+function hideActivities() {
+  document.getElementById('activities-section').style.display = 'none';
+  document.getElementById('act-divider').style.display = 'none';
+}
+
+function toggleActivity(category, name, cardEl, groupEl) {
+  groupEl.querySelectorAll('.act-card').forEach(c => c.classList.remove('selected'));
+  if (selectedActivities[category] === name) {
+    delete selectedActivities[category];
+  } else {
+    selectedActivities[category] = name;
+    cardEl.classList.add('selected');
+  }
+}
+
+// Custom picker events
+document.getElementById('custom-toggle').onclick = () => {
+  const p = document.getElementById('custom-picker');
+  p.style.display = p.style.display === 'none' ? 'block' : 'none';
+};
+document.getElementById('pick-day').onchange   = syncCustomConstraints;
+document.getElementById('pick-start').onchange = syncEndMin;
+document.getElementById('pick-end').onchange   = tryApplyCustom;
+
+// ────────────────────────────────────────────
+// STEP 4
+// ────────────────────────────────────────────
+document.getElementById('confirm-btn').onclick = goToStep4;
+
+function goToStep4() {
+  if (!selectedSlot) return;
+
+  document.getElementById('sum-day').textContent  = selectedSlot.day;
+  document.getElementById('sum-time').textContent = selectedSlot.hour_begin + ' às ' + selectedSlot.hour_end;
+
+  const list = document.getElementById('sum-activities');
+  list.innerHTML = '';
+
+  const catOrder = ['eat','bar','coffe','leisure','kiss','surprise'];
+  catOrder.forEach(cat => {
+    if (selectedActivities[cat]) {
+      const li = document.createElement('li');
+      li.textContent = (CAT_EMOJI[cat] || '✨') + '  ' + selectedActivities[cat];
+      list.appendChild(li);
+    }
+  });
+
+  showStep('step4');
+}
+
+document.getElementById('share-btn').onclick = async function () {
+  const btn  = this;
+  const card = document.getElementById('summary-card');
+
+  btn.disabled = true;
+  btn.textContent = 'Gerando imagem...';
+
+  try {
+    const canvas = await html2canvas(card, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: null
+    });
+
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    const file = new File([blob], 'nosso-encontro.png', { type: 'image/png' });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], title: 'Nosso encontro 💕' });
+    } else {
+      document.getElementById('share-fallback').style.display = 'block';
+    }
+  } catch (_) {
+    document.getElementById('share-fallback').style.display = 'block';
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Compartilhar no WhatsApp`;
+};
+
+// ────────────────────────────────────────────
+// NAV
+// ────────────────────────────────────────────
+function showStep(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
